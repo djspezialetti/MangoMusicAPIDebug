@@ -18,6 +18,15 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
+    @GetMapping("/{id}/play-count")
+    public ResponseEntity<Album> getPlayCount(@PathVariable int id){
+        Album album = albumService.getAlbumPlayCount(id);
+        if (album == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(album);
+    }
+
     @GetMapping
     public ResponseEntity<List<Album>> getAllAlbums(@RequestParam(required = false) String search) {
         if (search != null && !search.trim().isEmpty()) {

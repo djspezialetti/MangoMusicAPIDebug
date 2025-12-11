@@ -19,6 +19,10 @@ public class AlbumService {
         this.artistDao = artistDao;
     }
 
+    public List<Album> getAlbumPlayCount(int albumId){
+        return albumDao.getAlbumPlayCount(albumId);
+    }
+
     public List<Album> getAllAlbums() {
         return albumDao.getAllAlbums();
     }

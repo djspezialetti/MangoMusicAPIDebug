@@ -18,11 +18,12 @@ public class AlbumDao {
     }
 
     public Album getAlbumPlayCount(int albumId){
-        String query = "SELECT COUNT(ap.play_id), a.title " +
-                "FROM albums as a " +
-                "JOIN album_plays as ap ON (ap.album_id = a.album_id) " +
-                "WHERE ap.album_id = ? " +
-                "GROUP BY ap.album_id;";
+        String query = "SELECT COUNT(ap.play_id), al.album_id, " +
+                "al.artist_id, al.title,al.release_year, ar.name as artist_name " +
+                "FROM album_plays ap " +
+                "JOIN albums al ON (al.album_id = ap.album_id) " +
+                "JOIN artists ar ON al.artist_id = ar.artist_id " +
+                "WHERE al.album_id = ?;";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

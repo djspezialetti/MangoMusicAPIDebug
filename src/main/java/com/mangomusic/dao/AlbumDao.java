@@ -17,6 +17,24 @@ public class AlbumDao {
         this.dataSource = dataSource;
     }
 
+    public Album getAlbumPlayCount(int albumId){
+        String query = "SELECT COUNT(*) FROM album_plays WHERE album_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, albumId);
+
+            try (ResultSet results = statement.executeQuery()) {
+                if (results.next()) {
+                    return mapRowToAlbum(results);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting album by ID", e);
+        }
+        return null;
+    }
+
     public List<Album> getAllAlbums() {
         List<Album> albums = new ArrayList<>();
         String query = "SELECT al.album_id, al.artist_id, al.title, al.release_year, ar.name as artist_name " +

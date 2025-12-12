@@ -18,10 +18,10 @@ public class AlbumService {
         this.albumDao = albumDao;
         this.artistDao = artistDao;
     }
-    
-//    public List<Album> getRecentAlbums(int limit){
-//        return albumDao;
-//    }
+
+    public List<Album> getRecentAlbums(int limit){
+        return albumDao.getRecentAlbum(limit);
+    }
 
     public Album getAlbumPlayCount(int albumId){
         return albumDao.getAlbumPlayCount(albumId);

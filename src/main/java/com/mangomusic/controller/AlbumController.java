@@ -17,11 +17,11 @@ public class AlbumController {
     public AlbumController(AlbumService albumService) {
         this.albumService = albumService;
     }
-
-//    @GetMapping("/recent")
-//    public ResponseEntity<List<Album>> getRecentAlbums(@RequestParam(defaultValue = "10") int limit){
-//        return ResponseEntity.ok(albumService);
-//    }
+    
+    @GetMapping("/recent")
+    public ResponseEntity<List<Album>> getRecentAlbums(@RequestParam(defaultValue = "10") int limit){
+        return ResponseEntity.ok(albumService.getRecentAlbums(limit));
+    }
 
     @GetMapping("/{id}/play-count")
     public ResponseEntity<Album> getPlayCount(@PathVariable int id){

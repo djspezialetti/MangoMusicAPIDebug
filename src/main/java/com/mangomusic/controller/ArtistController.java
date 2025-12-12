@@ -18,6 +18,11 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Artist> getTopAlbumForArtist(@PathVariable int id){
+//
+//    }
+
     @GetMapping
     public ResponseEntity<List<Artist>> getAllArtists(@RequestParam(required = false) String search) {
         if (search != null && !search.trim().isEmpty()) {

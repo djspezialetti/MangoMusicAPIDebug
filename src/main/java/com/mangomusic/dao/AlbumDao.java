@@ -17,6 +17,31 @@ public class AlbumDao {
         this.dataSource = dataSource;
     }
 
+    public List<Album> getRecentAlbum(int limit){
+        List<Album> albums = new ArrayList<>();
+        String query = "SELECT al.album_id, al.artist_id, al.title, al.release_year, ar.name AS artist_name " +
+                "FROM albums AS al " +
+                "JOIN artists AS ar ON (ar.artist_id = al.artist_id) " +
+                "WHERE al.release_year >= (YEAR(CURDATE()) - 2) " +
+                "ORDER BY al.release_year DESC, al.title ASC " +
+                "LIMIT ?;";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, limit);
+
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    Album album = mapRowToAlbum(results);
+                    albums.add(album);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting recent albums", e);
+        }
+        return albums;
+    }
+
     public Album getTopAlbumForArtist(int artistId){
         String query = "SELECT COUNT(ap.play_id) as play_count, " +
                 "al.album_id, al.artist_id, al.title, " +
@@ -39,7 +64,7 @@ public class AlbumDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error getting album by ID", e);
+            throw new RuntimeException("Error getting the top album by artist via ID", e);
         }
         return null;
     }
@@ -62,7 +87,7 @@ public class AlbumDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error getting album by ID", e);
+            throw new RuntimeException("Error getting album play count by albumID", e);
         }
         return null;
     }

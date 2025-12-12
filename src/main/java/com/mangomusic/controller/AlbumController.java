@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,10 +18,16 @@ public class AlbumController {
     public AlbumController(AlbumService albumService) {
         this.albumService = albumService;
     }
-    
+
     @GetMapping("/recent")
     public ResponseEntity<List<Album>> getRecentAlbums(@RequestParam(defaultValue = "10") int limit){
-        return ResponseEntity.ok(albumService.getRecentAlbums(limit));
+        if (limit <= 10) {
+            return ResponseEntity.ok(albumService.getRecentAlbums(limit));
+        }
+        else if (limit > 100) {
+            return ResponseEntity.ok(albumService.getRecentAlbums(100));
+        }
+        return ResponseEntity.ok(albumService.getRecentAlbums(10));
     }
 
     @GetMapping("/{id}/play-count")
